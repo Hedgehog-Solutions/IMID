@@ -1,5 +1,30 @@
 # Lista spotkań wraz z tematem oraz uczestnikami
 
+
+
+
+---
+## Spotkanie 03
+### Termin
+- 04.04
+
+### Temat
+- Spotkanie z mentorem zespołu.
+
+### Obecni
+- dr inż. Marcin Szlenk
+- Batłomiej Rodzik
+- Jakub Sarna
+- Aleksander Sabak
+- Tomasz Świderski
+
+### Opis
+- tworzenie notatek oraz materiałów do dokumentacji
+- narzędzie do współpracy np Jira
+- trzymanie się terminów spotkań
+- 
+- Sprecyzowanie zadania
+
 ---
 ## Spotkanie 02
 ### Termin
