@@ -19,11 +19,12 @@
 - Tomasz Świderski
 
 ### Opis
-- tworzenie notatek oraz materiałów do dokumentacji
-- narzędzie do współpracy np Jira
-- trzymanie się terminów spotkań
-- 
-- Sprecyzowanie zadania
+- Tworzenie notatek oraz materiałów do dokumentacji,
+- Narzędzie do współpracy np Jira,
+- Trzymanie się terminów spotkań,
+- Ustalenie terminów kolejnych etapów oddawania zadania,
+- Omówienie z mentorem odbytych ćwiczeń z przedmiotu PZSP2,
+- Wstępne zarysy realizacji zadania.
 
 ---
 ## Spotkanie 02
@@ -42,8 +43,11 @@
 - Tomasz Świderski
 
 ### Opis
-- Pierwsze spotkanie z pracownikami IMID
-- Sprecyzowanie zadania
+- Pierwsze spotkanie i zapoznanie z pracownikami IMID,
+- Doprecyzowanie zadania,
+- Doprecyzowanie wymagań,
+- Doprecyzowanie funkcjonalności, które powinny zostać zrealizowane,
+- Przedstawienie przykładowego zestawu danych z IMID.
 
 ---
 ## Spotkanie 01
@@ -62,5 +66,8 @@
 - Tomasz Świderski
 
 ### Opis
-- Pierwsze spotkanie, zapoznanie zespołu z właścicielem projektu oraz mentorem, a także ustalenie formy komunikacji oraz spotkań
-- Wprowadzenie do tematu projektu, wstępne przedstawienie wymagań oraz dostępnych/zalecanych narzędzi
+- Zapoznanie zespołu z właścicielem projektu oraz mentorem,
+- Ustalenie formy komunikacji oraz spotkań,
+- Wprowadzenie do tematu projektu, 
+- Wstępne przedstawienie wymagań
+- Przedstawnienie oraz dyskusja nad dostępnymi/zalecanymi narzędziami.
