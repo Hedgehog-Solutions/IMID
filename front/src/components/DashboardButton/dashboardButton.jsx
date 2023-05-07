@@ -13,6 +13,7 @@ const StyledDiv = styled.div`
   display: flex;
   transition: 0.5s;
   
+  
   :hover{
     padding-left: 45px;
   }

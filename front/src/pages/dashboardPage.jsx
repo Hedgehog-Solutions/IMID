@@ -10,6 +10,7 @@ export const DashboardPage = () => {
       <PageWrapper>
         <Header text={'Dashboard'} />
         <DashboardButton path={'/new-data'} prompt={'Dodaj dane'} />
+        <DashboardButton path={'/browse-data'} prompt={'Przeglądaj dane'} />
       </PageWrapper>
   )
 }

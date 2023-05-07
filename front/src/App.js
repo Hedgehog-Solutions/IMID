@@ -12,13 +12,15 @@ import {
 import {NewDataPage} from "./pages/newDataPage";
 import {DashboardPage} from "./pages/dashboardPage";
 import {AccessRequestPage} from "./pages/accessRequestPage";
+import {BrowseDataPage} from "./pages/browseDataPage";
 
 const router = createBrowserRouter(
     createRoutesFromElements([
         <Route path={"/"} element={<LoginPage />} />,
         <Route path={"/dashboard"} element={<DashboardPage />} />,
         <Route path={"/new-data"} element={<NewDataPage />} />,
-        <Route path={"/access-request"} element={<AccessRequestPage />} />
+        <Route path={"/access-request"} element={<AccessRequestPage />} />,
+        <Route path={"browse-data"} element={<BrowseDataPage />} />
     ])
 )
 

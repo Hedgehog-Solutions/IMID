@@ -8,6 +8,7 @@ import {handleLogin} from "../api/authApi";
 import {BlueButton} from "../components/BlueButton/blueButton";
 import {Redirect, Navigate, NavLink} from "react-router-dom";
 import {P3} from "../utils/typography";
+import {Toast} from "../components/ToastNotifications/Toast";
 
 
 export const LoginPage = () => {
@@ -15,12 +16,20 @@ export const LoginPage = () => {
   const [password, setPassword] = React.useState('b');
 
   const [logged, setLogged] = React.useState(false)
+  const [toasts, setToasts] = React.useState([<div />]);
 
   const handleLoginAttempt = () => {
-    setLogged(handleLogin(login, password));
+    const result = handleLogin(login, password);
+
+    if (result) {
+      setLogged(true);
+    }
+    else {
+      setToasts(<Toast text={'błędne dane logowania!'} key={login + password} type={'error'}/>)
+    }
   }
   return (
-      <PageWrapper>
+      <PageWrapper toasts={toasts}>
         <Header text={'Witaj!'} fade={true} />
         <LoginInput initialText={'login'} onChange={e => setLogin(e.target.value)}/>
         <LoginInput password={true} initialText={'hasło'} onChange={e => setPassword(e.target.value)}/>

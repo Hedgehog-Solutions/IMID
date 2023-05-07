@@ -25,3 +25,10 @@ export const P3 = styled.p`
   font-weight: 200;
   font-family: 'Roboto', sans-serif;
 `
+
+export const P2 = styled.p`
+  font-size: 16px;
+  font-weight: 400;
+  font-family: 'Roboto', sans-serif;
+
+`
