@@ -21,8 +21,36 @@ def upload():
     request.files['data'].save(file_path)
     populate(db_path, file_path)
     return "Ok"
+    # TODO: reszta odpowiedzi
 
 
-@bp.route('/download')
-def download():
-    return jsonify([{'id': 0, 'value': 'Mock'}, {'id': 1, 'value': 'Download'}])
+@bp.route('/data/{version:str}')
+def data(version):
+    return jsonify(
+        {'headers': [{'header':'Header Chandler', 'accessor':'red'},
+                     {'header':'Header McNamara', 'accessor':'yellow'},
+                     {'header':'Header Duke', 'accessor':'green'}],
+         'data': [{'red': 21, 'yellow': 37, 'green': 'JP2'},
+                  {'red': 14, 'yellow': 88, 'green': 'HH'},
+                  {'red': 69, 'yellow': 420, 'green': 'now laugh'}]}
+    )
+
+
+@bp.route('/versions')
+def versions():
+    ...
+
+
+@bp.route('/export/{version:str}')
+def export(version):
+    ...
+
+
+@bp.route('/login', methods=('POST',))
+def login():
+    ...
+
+
+@bp.route('/logout', methods=('POST',))
+def logout():
+    ...
