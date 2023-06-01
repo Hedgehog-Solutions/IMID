@@ -44,7 +44,7 @@ def upload():
     # TODO: reszta odpowiedzi
 
 
-@bp.route('/data/{version:str}')
+@bp.route('/data/<str:version>')
 @login_required
 def data(version):
     return jsonify(
@@ -72,7 +72,7 @@ def export(version):
 @bp.route('/login', methods=('POST',))
 def login():
     match request.json:
-        case {'username': str(email), 'password': str(password)}:
+        case {'email': str(email), 'password': str(password)}:
             user = User.query.filter(User.email == email).one_or_none()
             if user is None or not user.verify_password(password):
                 return ('Invalid credentials', 401)
