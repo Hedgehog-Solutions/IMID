@@ -37,6 +37,11 @@ def create_app(test_config=None):
     # commandline arguments
     # app.cli.add_command(init_db)
 
+    @app.after_request
+    def handle_CORS(response):
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        return response
+
     return app
 
 
