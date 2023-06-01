@@ -19,6 +19,7 @@ def init_db(reset):
 @click.command('add-user')
 @click.argument('email')
 @click.argument('password')
+@with_appcontext
 def add_user(email, password):
     old_user = User.query.filter(User.email == email).one_or_none()
     if old_user is not None:
@@ -35,6 +36,7 @@ def add_user(email, password):
 @click.command('change-password')
 @click.argument('email')
 @click.argument('new_password')
+@with_appcontext
 def change_password(email, new_password):
     user = User.query.filter(User.email == email).one_or_none()
     if user is None:
@@ -47,6 +49,7 @@ def change_password(email, new_password):
 
 @click.command('delete-user')
 @click.argument('email')
+@with_appcontext
 def delete_user(email):
     user = User.query.filter(User.email == email).one_or_none()
     if user is None:
