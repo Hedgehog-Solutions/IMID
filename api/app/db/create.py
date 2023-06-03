@@ -1,10 +1,7 @@
-import sqlite3
 import psycopg2
 
 def create(host, database, user, password):
-
     # utworzenie połączenia z bazą danych
-    # conn = sqlite3.connect(db_name)
     conn = psycopg2.connect(
         host=host,
         database=database,
@@ -14,7 +11,6 @@ def create(host, database, user, password):
     cur = conn.cursor()
 
     cur.execute('''DROP TABLE IF EXISTS variant_column_values''')
-    cur.execute('''DROP TABLE IF EXISTS column_versions''')
     cur.execute('''DROP TABLE IF EXISTS versions''')
     cur.execute('''DROP TABLE IF EXISTS variant_columns''')
     cur.execute('''DROP TABLE IF EXISTS variants''')
@@ -39,13 +35,6 @@ def create(host, database, user, password):
                  (version_id SERIAL PRIMARY KEY,
                   from_date TEXT NOT NULL);''')
 
-    # utworzenie tabeli volumn_versions z kluczem obcym na tabelę versions oraz variant_columns
-    cur.execute('''CREATE TABLE IF NOT EXISTS column_versions
-                 (version_id INTEGER NOT NULL,
-                  column_id INTEGER NOT NULL,
-                  FOREIGN KEY(version_id) REFERENCES versions(version_id),
-                  FOREIGN KEY(column_id) REFERENCES variant_columns(column_id));''')
-
     # utworzenie tabeli variant_column_values z kluczem obcym na tabelę variants, versions oraz variant_columns
     cur.execute('''CREATE TABLE IF NOT EXISTS variant_column_values
                  (variant_id INTEGER NOT NULL,
@@ -65,5 +54,11 @@ def create(host, database, user, password):
     cur.close()
     conn.close()
 
-# if __name__ == '__main__':
-#     create('test.db')
+if __name__ == '__main__':
+
+    host=" "
+    database=" "
+    user=" "
+    password=" "
+
+    create(host, database, user, password)

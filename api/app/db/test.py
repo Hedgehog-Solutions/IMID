@@ -30,10 +30,27 @@ def test(host, database, user, password):
     print("wartosci variantów uzytkowinika z id = 3")
     for metadata, value in cursor:
         print(f"{metadata}\t: {value}")
+    print()
+
+    cursor.execute(f"SELECT * FROM variants_view")
+    rows = cursor.fetchall()
+    ids = [row[0] for row in rows]
+    print("wartosci ids")
+    print(ids)
+    print(f"wartosc 25: {rows[0][0]}")
+    print(f"wartosc 125: {rows[5][0]}")
+    print(f"wartosc 1225: {rows[25][0]}")
+
+    print()
 
     cursor.close()
     conn.close()
 
 
-# if __name__ == '__main__':
-#     test(host, database, user, password)
+if __name__ == '__main__':
+    host=" "
+    database=" "
+    user=" "
+    password=" "
+
+    test(host, database, user, password)
