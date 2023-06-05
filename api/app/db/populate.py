@@ -26,8 +26,8 @@ def get_attributes_in_version(cursor, version):
                     FROM variant_column_values val 
                     JOIN versions ver ON(val.version_id = ver.version_id)
                     JOIN variant_columns col ON(val.column_id = col.column_id)
-                    WHERE ver.version_id = """ + str(version) +
-                    """ GROUP BY col.metadata""")
+                    WHERE ver.version_id = %s
+                    GROUP BY col.metadata""", (version,))
     for row in cursor:
         variants_metadata.append(row[0])
     return variants_metadata
@@ -70,7 +70,7 @@ def create_view(host, database, user, password, version):
     conn.close()
 
 
-def populate(host, database, user, password, data_name, version):
+def populate(host, database, user, password, data_name, datetime):
 
     df = pd.read_csv(data_name, sep="\t", index_col=0)
     df = df.rename(columns=lambda x: x.lower())
@@ -90,7 +90,10 @@ def populate(host, database, user, password, data_name, version):
     # wczytanie wszystkich aktualnych metadanych z variant_columns
     variants_metadata = get_attributes(cursor)
 
-    cursor.execute("INSERT INTO versions (version_id, from_date) VALUES (%s, '16.05.2023')", (version, ))
+    cursor.execute("INSERT INTO versions (from_date) VALUES (%s) "
+                   "RETURNING version_id", (datetime, ))
+
+    version = cursor.fetchone()[0]
 
     i = 0 #TODO TEMP
     for index, row in df.iterrows():
@@ -142,4 +145,4 @@ if __name__ == '__main__':
 
     file_path = "RG-corriell_S7_VEP.tsv"
     # populate(host, database, user, password, file_path, version)
-    create_view(host, database, user, password, version)
+#    create_view(host, database, user, password, version)

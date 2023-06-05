@@ -6,7 +6,7 @@ import functools
 
 from app.db.populate import populate
 from app.db.create import create
-from app.model import User
+from app.model import User, Version
 
 host="change"
 database="change"
@@ -50,7 +50,7 @@ def upload():
     # TODO: reszta odpowiedzi
 
 
-@bp.route('/data/<str:version>')
+@bp.route('/data/<string:version>')
 @login_required
 def data(version):
     return jsonify(
@@ -66,10 +66,12 @@ def data(version):
 @bp.route('/versions')
 @login_required
 def versions():
-    ...
+    vs = Version.query.all()
+    return jsonify([{'id': v.id, 'from_date': v.from_date.isoformat()}
+                    for v in vs])
 
 
-@bp.route('/export/{version:str}')
+@bp.route('/export/<string:version>')
 @login_required
 def export(version):
     ...

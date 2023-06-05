@@ -33,7 +33,7 @@ def create(host, database, user, password):
     # utworzenie tabeli versions
     cur.execute('''CREATE TABLE IF NOT EXISTS versions 
                  (version_id SERIAL PRIMARY KEY,
-                  from_date TEXT NOT NULL);''')
+                  from_date TIMESTAMP NOT NULL);''')
 
     # utworzenie tabeli variant_column_values z kluczem obcym na tabelę variants, versions oraz variant_columns
     cur.execute('''CREATE TABLE IF NOT EXISTS variant_column_values

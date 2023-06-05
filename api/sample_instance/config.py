@@ -1,4 +1,7 @@
-SECRET_KEY = 'CHANGE THIS'
+SECRET_KEY = 'CHANGE ME'
 
 
-DATABASE_URI = 'sqlite:////{instance}/test.db'
+DATABASE_HOST = '127.0.0.1'
+DATABASE_USER = 'postgres'
+DATABASE_PASSWORD = 'test'
+DATABASE_NAME = 'postgres'
