@@ -1,11 +1,11 @@
-from flask import Blueprint, request, current_app, abort, session, g
+from flask import (Blueprint, request, current_app, abort, session, g,
+                   current_app)
 from flask.json import jsonify
 
 import os.path
 import functools
 
-from app.db.populate import populate
-from app.db.create import create
+from app.db.populate import populate, create_view, connect
 from app.model import User, Version
 
 host="change"
@@ -39,27 +39,37 @@ def login_required(view):
 def upload():
     if 'data' not in request.files:
         abort(400)
-    db_path = os.path.join(current_app.instance_path, 'test.db')
-    # if not os.path.exists(db_path):
-    if True:
-        create(host, database, user, password) #TODO
     file_path = os.path.join(current_app.instance_path, 'data.csv')
     request.files['data'].save(file_path)
     populate(host, database, user, password, file_path)
-    return "Ok"
-    # TODO: reszta odpowiedzi
 
 
-@bp.route('/data/<string:version>')
+@bp.route('/data/<int:version>')
 @login_required
 def data(version):
+    create_view(current_app.config['DATABASE_HOST'],
+                current_app.config['DATABASE_NAME'],
+                current_app.config['DATABASE_USER'],
+                current_app.config['DATABASE_PASSWORD'], version)
+
+    conn, cursor = connect(current_app.config['DATABASE_HOST'],
+                           current_app.config['DATABASE_NAME'],
+                           current_app.config['DATABASE_USER'],
+                           current_app.config['DATABASE_PASSWORD'])
+
+    cursor.execute('SELECT * FROM variants_view;')
+
+    headers = [{'header': col.name, 'accessor': col.name}
+               for col in cursor.description]
+    data = [{col.name: value for col, value in zip(cursor.description, row)}
+            for row in cursor]
+
+    cursor.close()
+    conn.close()
+
     return jsonify(
-        {'headers': [{'header':'Header Chandler', 'accessor':'red'},
-                     {'header':'Header McNamara', 'accessor':'yellow'},
-                     {'header':'Header Duke', 'accessor':'green'}],
-         'data': [{'red': 21, 'yellow': 37, 'green': 'JP2'},
-                  {'red': 14, 'yellow': 88, 'green': 'HH'},
-                  {'red': 69, 'yellow': 420, 'green': 'now laugh'}]}
+        {'headers': headers,
+         'data': data}
     )
 
 
@@ -71,7 +81,7 @@ def versions():
                     for v in vs])
 
 
-@bp.route('/export/<string:version>')
+@bp.route('/export/<int:version>')
 @login_required
 def export(version):
     ...

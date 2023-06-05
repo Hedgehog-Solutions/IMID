@@ -2,6 +2,17 @@ import psycopg2
 import pandas as pd
 
 
+def connect(host, database, user, password):
+    conn = psycopg2.connect(
+        host=host,
+        database=database,
+        user=user,
+        password=password)
+    
+    cursor = conn.cursor()
+    return conn, cursor
+
+
 def get_stable_columns(cursor):
     variants_atr = list()
     cursor.execute("""SELECT column_name
@@ -21,22 +32,19 @@ def get_attributes(cursor):
 
 
 def get_attributes_in_version(cursor, version):
-    variants_metadata = list()
     cursor.execute("""SELECT col.metadata
                     FROM variant_column_values val 
                     JOIN versions ver ON(val.version_id = ver.version_id)
                     JOIN variant_columns col ON(val.column_id = col.column_id)
                     WHERE ver.version_id = %s
                     GROUP BY col.metadata""", (version,))
-    for row in cursor:
-        variants_metadata.append(row[0])
-    return variants_metadata
+    return [row[0] for row in cursor]
 
 
 def create_view(host, database, user, password, version):
     # version = 1
     sql_query = "CREATE MATERIALIZED VIEW IF NOT EXISTS variants_view AS SELECT "
-    sql_from = "FROM Variant_column_values val JOIN variant_columns col ON(val.column_id = col.column_id) JOIN versions ver ON(val.version_id = ver.version_id) JOIN variants var ON(val.variant_id = var.variant_id) "
+    sql_from = "FROM variant_column_values val JOIN variant_columns col ON(val.column_id = col.column_id) JOIN versions ver ON(val.version_id = ver.version_id) JOIN variants var ON(val.variant_id = var.variant_id) "
     sql_where = "WHERE ver.version_id = " + str(version) + " "
     sql_group_by = "GROUP BY "
     sql_order_by = "ORDER BY var.variant_id; "
@@ -72,7 +80,7 @@ def create_view(host, database, user, password, version):
 
 def populate(host, database, user, password, data_name, datetime):
 
-    df = pd.read_csv(data_name, sep="\t", index_col=0)
+    df = pd.read_csv(data_name, sep="\t", index_col=False)
     df = df.rename(columns=lambda x: x.lower())
 
     # utworzenie połączenia z bazą danych
@@ -100,7 +108,8 @@ def populate(host, database, user, password, data_name, datetime):
         i = i+1
 
         cursor.execute('''INSERT INTO variants (sex, chr, pos, ref, alt) 
-                    VALUES (%s, %s, %s, %s, %s) RETURNING variant_id''', (row['sex'], row['chr'], row['pos'], row['ref'], row['alt']))
+                          VALUES (%s, %s, %s, %s, %s) RETURNING variant_id''',
+                       (row['sex'], row['chr'], row['pos'], row['ref'], row['alt']))
 
         variant_id = cursor.fetchone()[0]
         print(variant_id) #TODO TEMP

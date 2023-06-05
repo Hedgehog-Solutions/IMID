@@ -10,6 +10,7 @@ def create(host, database, user, password):
     
     cur = conn.cursor()
 
+    cur.execute('''DROP MATERIALIZED VIEW IF EXISTS variants_view''')
     cur.execute('''DROP TABLE IF EXISTS variant_column_values''')
     cur.execute('''DROP TABLE IF EXISTS versions''')
     cur.execute('''DROP TABLE IF EXISTS variant_columns''')
@@ -18,11 +19,11 @@ def create(host, database, user, password):
     # utworzenie tabeli variants
     cur.execute('''CREATE TABLE IF NOT EXISTS variants
                  (variant_id SERIAL PRIMARY KEY,
-                  sex TEXT NOT NULL,
-                  chr TEXT NOT NULL,
-                  pos TEXT NOT NULL,
-                  ref TEXT NOT NULL,
-                  alt TEXT NOT NULL);''')
+                  Sex TEXT NOT NULL,
+                  Chr TEXT NOT NULL,
+                  POS TEXT NOT NULL,
+                  Ref TEXT NOT NULL,
+                  Alt TEXT NOT NULL);''')
 
     # utworzenie tabeli variant_columns
     cur.execute('''CREATE TABLE IF NOT EXISTS variant_columns 
