@@ -20,3 +20,9 @@ class User(db.Model):
 
     def verify_password(self, password):
         return check_password_hash(self._password, password)
+
+
+class Version(db.Model):
+    __tablename__ = 'versions'
+    id = db.Column('version_id', db.Integer, primary_key=True)
+    from_date = db.Column('from_date', db.DateTime, nullable=False)

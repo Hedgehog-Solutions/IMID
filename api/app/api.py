@@ -1,12 +1,14 @@
-from flask import Blueprint, request, current_app, abort, session, g
+from flask import (Blueprint, request, current_app, abort, session, g,
+                   current_app, send_file)
 from flask.json import jsonify
 
 import os.path
 import functools
+import csv
+from datetime import datetime
 
-from app.db.populate import populate
-from app.db.create import create
-from app.model import User
+from app.db.populate import populate, create_view, connect
+from app.model import User, Version
 
 
 bp = Blueprint('api', __name__, url_prefix='/api')
@@ -34,45 +36,84 @@ def login_required(view):
 def upload():
     if 'data' not in request.files:
         abort(400)
-    db_path = os.path.join(current_app.instance_path, 'test.db')
-    if not os.path.exists(db_path):
-        create(db_path)
     file_path = os.path.join(current_app.instance_path, 'data.csv')
     request.files['data'].save(file_path)
-    populate(db_path, file_path)
-    return "Ok"
-    # TODO: reszta odpowiedzi
+    populate(current_app.config['DATABASE_HOST'],
+             current_app.config['DATABASE_NAME'],
+             current_app.config['DATABASE_USER'],
+             current_app.config['DATABASE_PASSWORD'], file_path, datetime.now())
+    return "Ok", 200
 
 
-@bp.route('/data/{version:str}')
+@bp.route('/data/<int:version>')
 @login_required
 def data(version):
+    create_view(current_app.config['DATABASE_HOST'],
+                current_app.config['DATABASE_NAME'],
+                current_app.config['DATABASE_USER'],
+                current_app.config['DATABASE_PASSWORD'], version)
+
+    conn, cursor = connect(current_app.config['DATABASE_HOST'],
+                           current_app.config['DATABASE_NAME'],
+                           current_app.config['DATABASE_USER'],
+                           current_app.config['DATABASE_PASSWORD'])
+
+    cursor.execute('SELECT * FROM variants_view;')
+
+    headers = [{'header': col.name, 'accessor': col.name}
+               for col in cursor.description]
+    data = [{col.name: value for col, value in zip(cursor.description, row)}
+            for row in cursor]
+
+    cursor.close()
+    conn.close()
+
     return jsonify(
-        {'headers': [{'header':'Header Chandler', 'accessor':'red'},
-                     {'header':'Header McNamara', 'accessor':'yellow'},
-                     {'header':'Header Duke', 'accessor':'green'}],
-         'data': [{'red': 21, 'yellow': 37, 'green': 'JP2'},
-                  {'red': 14, 'yellow': 88, 'green': 'HH'},
-                  {'red': 69, 'yellow': 420, 'green': 'now laugh'}]}
+        {'headers': headers,
+         'data': data}
     )
 
 
 @bp.route('/versions')
 @login_required
 def versions():
-    ...
+    vs = Version.query.all()
+    return jsonify([{'id': v.id, 'from_date': v.from_date.isoformat()}
+                    for v in vs])
 
 
-@bp.route('/export/{version:str}')
+@bp.route('/export/<int:version>')
 @login_required
 def export(version):
-    ...
+    create_view(current_app.config['DATABASE_HOST'],
+                current_app.config['DATABASE_NAME'],
+                current_app.config['DATABASE_USER'],
+                current_app.config['DATABASE_PASSWORD'], version)
+
+    conn, cursor = connect(current_app.config['DATABASE_HOST'],
+                           current_app.config['DATABASE_NAME'],
+                           current_app.config['DATABASE_USER'],
+                           current_app.config['DATABASE_PASSWORD'])
+
+    cursor.execute('SELECT * FROM variants_view;')
+
+    file_path = os.path.join(current_app.instance_path, 'data.tsv')
+    with open(file_path, 'w', newline='') as tsvfile:
+        writer = csv.writer(tsvfile, 'excel-tab')
+        writer.writerow([col.name for col in cursor.description])
+        for row in cursor:
+            writer.writerow(row)
+    
+    cursor.close()
+    conn.close()
+
+    return send_file(file_path, as_attachment=True)
 
 
 @bp.route('/login', methods=('POST',))
 def login():
     match request.json:
-        case {'username': str(email), 'password': str(password)}:
+        case {'email': str(email), 'password': str(password)}:
             user = User.query.filter(User.email == email).one_or_none()
             if user is None or not user.verify_password(password):
                 return ('Invalid credentials', 401)

@@ -3,6 +3,7 @@ from flask import current_app
 from flask.cli import with_appcontext
 
 from .model import *
+from .db.create import create
 
 
 @click.command('init-db')
@@ -13,6 +14,10 @@ def init_db(reset):
         print('Resetting the database')
         User.__table__.drop()
     print('Recreating the database')
+    create(current_app.config['DATABASE_HOST'],
+           current_app.config['DATABASE_NAME'],
+           current_app.config['DATABASE_USER'],
+           current_app.config['DATABASE_PASSWORD'])
     db.create_all()
 
 
