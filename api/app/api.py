@@ -1,17 +1,13 @@
 from flask import (Blueprint, request, current_app, abort, session, g,
-                   current_app)
+                   current_app, send_file)
 from flask.json import jsonify
 
 import os.path
 import functools
+import csv
 
 from app.db.populate import populate, create_view, connect
 from app.model import User, Version
-
-host="change"
-database="change"
-user="change"
-password="change123"
 
 
 bp = Blueprint('api', __name__, url_prefix='/api')
@@ -84,7 +80,29 @@ def versions():
 @bp.route('/export/<int:version>')
 @login_required
 def export(version):
-    ...
+    create_view(current_app.config['DATABASE_HOST'],
+                current_app.config['DATABASE_NAME'],
+                current_app.config['DATABASE_USER'],
+                current_app.config['DATABASE_PASSWORD'], version)
+
+    conn, cursor = connect(current_app.config['DATABASE_HOST'],
+                           current_app.config['DATABASE_NAME'],
+                           current_app.config['DATABASE_USER'],
+                           current_app.config['DATABASE_PASSWORD'])
+
+    cursor.execute('SELECT * FROM variants_view;')
+
+    file_path = os.path.join(current_app.instance_path, 'data.tsv')
+    with open(file_path, 'w', newline='') as tsvfile:
+        writer = csv.writer(tsvfile, 'excel-tab')
+        writer.writerow([col.name for col in cursor.description])
+        for row in cursor:
+            writer.writerow(row)
+    
+    cursor.close()
+    conn.close()
+
+    return send_file(file_path, as_attachment=True)
 
 
 @bp.route('/login', methods=('POST',))
