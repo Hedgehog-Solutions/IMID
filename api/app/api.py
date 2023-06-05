@@ -5,6 +5,7 @@ from flask.json import jsonify
 import os.path
 import functools
 import csv
+from datetime import datetime
 
 from app.db.populate import populate, create_view, connect
 from app.model import User, Version
@@ -37,7 +38,11 @@ def upload():
         abort(400)
     file_path = os.path.join(current_app.instance_path, 'data.csv')
     request.files['data'].save(file_path)
-    populate(host, database, user, password, file_path)
+    populate(current_app.config['DATABASE_HOST'],
+             current_app.config['DATABASE_NAME'],
+             current_app.config['DATABASE_USER'],
+             current_app.config['DATABASE_PASSWORD'], file_path, datetime.now())
+    return "Ok", 200
 
 
 @bp.route('/data/<int:version>')
