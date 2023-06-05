@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import {colors} from "../../utils/colors";
 import {P3} from "../../utils/typography";
+import {NavLink} from "react-router-dom";
 
 const StyledBlueButton = styled.button`
   width: 100px;
@@ -29,5 +30,17 @@ export const BlueButton = ({prompt, onClick}) => {
           {prompt}
         </P3>
       </StyledBlueButton>
+  )
+}
+
+export const BlueNavLink = ({prompt, path}) => {
+  return(
+      <NavLink to={path} >
+        <StyledBlueButton >
+          <P3 style={{margin: 0, fontWeight: 400}}>
+            {prompt}
+          </P3>
+        </StyledBlueButton>
+      </NavLink>
   )
 }

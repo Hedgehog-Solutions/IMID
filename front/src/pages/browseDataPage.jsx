@@ -3,10 +3,11 @@ import styled from "styled-components";
 import {PageWrapper} from "../components/PageWrapper/pageWrapper";
 import {DataTable} from "../components/DataTable/DataTable";
 import {Toast} from "../components/ToastNotifications/Toast";
-import {BlueButton} from "../components/BlueButton/blueButton";
+import {BlueButton, BlueNavLink} from "../components/BlueButton/blueButton";
 import {Navigate} from "react-router-dom";
 
 import { makeWord } from "../utils/mockData";
+import {StolenTable} from "../components/DataTable/DataStolen";
 
 export const BrowseDataPage = () => {
 
@@ -26,10 +27,11 @@ export const BrowseDataPage = () => {
           toasts={toasts}
           leftMenu={[
               <BlueButton onClick={handleDataExport} prompt={'eksportuj'}/>,
-              <BlueButton onClick={handleDataImport} prompt={'importuj'}/>
+              <BlueButton onClick={handleDataImport} prompt={'importuj'}/>,
+              <BlueNavLink path={'/dashboard'} prompt={'cofnij'} />
           ]}
       >
-        <DataTable />
+        <StolenTable />
         {navToImport && <Navigate to={'/new-data'}/>}
       </PageWrapper>
   )

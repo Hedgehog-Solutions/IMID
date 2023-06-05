@@ -4,11 +4,12 @@ import { Header } from "../components/Header/header";
 
 import { PageWrapper } from "../components/PageWrapper/pageWrapper";
 import {LoginInput} from "../components/LoginInput/LoginInput";
-import {handleLogin} from "../api/authApi";
+import {handleLogin, handleTrueLogin} from "../api/authApi";
 import {BlueButton} from "../components/BlueButton/blueButton";
 import {Redirect, Navigate, NavLink} from "react-router-dom";
 import {P3} from "../utils/typography";
 import {Toast} from "../components/ToastNotifications/Toast";
+import {testDupa} from "../api/testApi";
 
 
 export const LoginPage = () => {
@@ -20,6 +21,10 @@ export const LoginPage = () => {
 
   const handleLoginAttempt = () => {
     const result = handleLogin(login, password);
+
+    handleTrueLogin(login, password).then(() => testDupa((e) => console.log(e)));
+
+
 
     if (result) {
       setLogged(true);

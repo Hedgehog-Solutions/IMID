@@ -3,6 +3,7 @@ import { PageWrapper } from "../components/PageWrapper/pageWrapper";
 import { Header } from "../components/Header/header";
 import {FileDropzone} from "../components/FileDropzone/FileDropzone";
 import {Toast} from "../components/ToastNotifications/Toast";
+import {BlueNavLink} from "../components/BlueButton/blueButton";
 
 
 
@@ -12,7 +13,7 @@ export const NewDataPage = () => {
 
   const handleDataDrop = (files) => {
     files.forEach(f => {
-      if (f.path.match('^.*\\.(pdf|PDF)$')) {
+      if (f.path.match('^.*\\.(txt|TXT|csv|CSV|dat|DAT|tsc|TSV)$')) {
         console.log(f);
         setToasts(<Toast text={'Udało się dodać dane!'} key={'1'} type={'success'}/>)
       }
@@ -23,7 +24,12 @@ export const NewDataPage = () => {
     })
   }
   return (
-      <PageWrapper toasts={toasts}>
+      <PageWrapper
+          toasts={toasts}
+          leftMenu={[
+              <BlueNavLink path={'/dashboard'} prompt={'cofnij'} />,
+          ]}
+      >
         <Header text={'Dodaj dane'} />
         <FileDropzone callback={handleDataDrop}/>
       </PageWrapper>

@@ -35,7 +35,14 @@ const Styles = styled.div`
   }
 `
 
+const testFilter = (row, columnId, value, addMeta) => {
+  console.log(row, columnId, addMeta);
+  return row.getValue(columnId).match(value);
+}
+
 function Table({ columns, data }) {
+
+  const [columnFilters, setColumnFilters] = React.useState([{firstName: 'asd'}]);
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -46,6 +53,10 @@ function Table({ columns, data }) {
   } = useTable({
     columns,
     data,
+    state: {
+      columnFilters,
+    },
+    onColumnFiltersChange: setColumnFilters,
   })
 
   // Render the UI for your table
@@ -54,8 +65,13 @@ function Table({ columns, data }) {
         <thead>
         {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                  <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+              {headerGroup.headers.map(header => (
+                  <th {...header.getHeaderProps()}>{header.render('Header')}
+                    {header.getCanFilter ? (
+                        <FilterInput header={header.id} />
+                    ) : null}
+                  </th>
+
               ))}
             </tr>
         ))}
@@ -76,25 +92,26 @@ function Table({ columns, data }) {
   )
 }
 
+const FilterInput = ({header}) => {
+
+  return(
+      <input onChange={e => console.log(e.target.value, header)} placeholder={"Szukaj..."}/>
+  )
+}
+
 export const DataTable = () => {
   const columns = React.useMemo(
       () => [
-        {
-          Header: 'Name',
-          columns: [
             {
               Header: 'First Name',
               accessor: 'firstName',
+              filterFn: 'default',
+              canFilter: true,
             },
             {
               Header: 'Last Name',
               accessor: 'lastName',
             },
-          ],
-        },
-        {
-          Header: 'Info',
-          columns: [
             {
               Header: 'Age',
               accessor: 'age',
@@ -111,8 +128,6 @@ export const DataTable = () => {
               Header: 'Profile Progress',
               accessor: 'progress',
             },
-          ],
-        },
       ],
       []
   )
