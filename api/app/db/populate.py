@@ -116,7 +116,8 @@ def populate(host, database, user, password, data_name, datetime):
 
         values = []
         for column in df.columns:
-
+            if row[column] == '-':
+                continue
             if column not in variants_atr:
                 if column not in variants_metadata:
                     cursor.execute('''INSERT INTO variant_columns (metadata, type)
