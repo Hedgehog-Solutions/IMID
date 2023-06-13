@@ -4,6 +4,7 @@ import { Header } from "../components/Header/header";
 import {FileDropzone} from "../components/FileDropzone/FileDropzone";
 import {Toast} from "../components/ToastNotifications/Toast";
 import {BlueNavLink} from "../components/BlueButton/blueButton";
+import {postUploadFile} from "../api/databaseApi";
 
 
 
@@ -15,6 +16,7 @@ export const NewDataPage = () => {
     files.forEach(f => {
       if (f.path.match('^.*\\.(txt|TXT|csv|CSV|dat|DAT|tsc|TSV)$')) {
         console.log(f);
+        postUploadFile(f.path).then();
         setToasts(<Toast text={'Udało się dodać dane!'} key={'1'} type={'success'}/>)
       }
       else {

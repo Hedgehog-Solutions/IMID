@@ -5,11 +5,13 @@ import { useTable, useFilters, useGlobalFilter, useAsyncDebounce } from 'react-t
 import {matchSorter} from 'match-sorter'
 
 import makeData from "../../utils/mockData2";
-import {browseDataApi} from "../../api/databaseApi";
+import {browseDataApi, getDownloadFile} from "../../api/databaseApi";
 
 const Styles = styled.div`
-  padding: 1rem;
 
+  margin-top: 20px;
+  overflow: auto;
+  max-width: 2200px;
   table {
     border-spacing: 0;
     border: 1px solid black;
@@ -25,7 +27,7 @@ const Styles = styled.div`
     th,
     td {
       margin: 0;
-      padding: 0.5rem;
+      //padding: 0.5rem;
       border-bottom: 1px solid black;
       border-right: 1px solid black;
 
@@ -265,7 +267,7 @@ function Table({ columns, data }) {
 
   // We don't want to render all of the rows for this example, so cap
   // it for this use case
-  const firstPageRows = rows.slice(0, 10)
+  const firstPageRows = rows.slice(0, 20)
 
   return (
       <>
@@ -335,22 +337,40 @@ function filterGreaterThan(rows, id, filterValue) {
 // check, but here, we want to remove the filter if it's not a number
 filterGreaterThan.autoRemove = val => typeof val !== 'number'
 
-export const StolenTable = () => {
+export const DataTableFiltered = React.forwardRef((props, ref) => {
 
   const [tableData, setTableData] = React.useState(null)
 
+  const [tableVersion, setTableVersion] = React.useState('210321');
+
+  console.log("VERSION: " + tableVersion);
+
+
+
+  React.useImperativeHandle(ref, () => ({
+    download() {
+      const fileData = JSON.stringify(newData);
+      const blob = new Blob([fileData], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = `${tableVersion}.json`;
+      link.href = url;
+      //link.click();
+
+      getDownloadFile(tableVersion).then();
+    },
+    setData(version) {
+      console.log("CHANGING: " + version);
+      setTableVersion(version);
+      setTableData(null);
+    }
+  }));
+
 
   React.useEffect(() => {
-    tableData === null && browseDataApi(setTableData);
-    console.log(tableData);
+    tableData === null && browseDataApi(setTableData, tableVersion);
   })
 
-  const newColumns = tableData ? tableData.headers.map(el => {
-    return {
-      Header: el.header,
-      accessor: el.accessor,
-    }
-  }) : null;
 
   const columns = React.useMemo(
       () => [
@@ -402,15 +422,24 @@ export const StolenTable = () => {
       []
   )
 
+
+  const data = React.useMemo(() => makeData(30), []);
+
+  const newColumns = tableData ? tableData.headers.map(el => {
+    return {
+      Header: el.header,
+      accessor: el.accessor,
+    }
+  }) : null;
+
   const newData = tableData !== null ? tableData.data.map(el => {
     return el
   }) : null;
 
-  const data = React.useMemo(() => makeData(30), [])
 
   return (
       <Styles>
         <Table columns={newColumns !== null ? newColumns : columns} data={newData !== null ? newData : data} />
       </Styles>
   )
-}
+});

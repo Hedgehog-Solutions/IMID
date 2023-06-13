@@ -7,7 +7,11 @@ import {BlueButton, BlueNavLink} from "../components/BlueButton/blueButton";
 import {Navigate} from "react-router-dom";
 
 import { makeWord } from "../utils/mockData";
-import {StolenTable} from "../components/DataTable/DataStolen";
+import {DataTableFiltered} from "../components/DataTable/DataTableFiltered";
+import {VersionSelect} from "../components/VersionSelect/VersionSelect";
+import {getVersionsApi} from "../api/databaseApi";
+
+
 
 export const BrowseDataPage = () => {
 
@@ -15,8 +19,25 @@ export const BrowseDataPage = () => {
 
   const [navToImport, setNavToImport] = React.useState(false);
 
+  const [currentVersion, setCurrentVersion] = React.useState('0');
+
+  const [versions, setVersions] = React.useState([])
+
+  const tableRef = React.useRef(null);
+
   const handleDataExport = () => {
     setToasts(<Toast text={'Udało się wyeksportować dane!'} key={makeWord(5)} type={'success'}/>)
+    tableRef.current !== null && tableRef.current.download();
+
+  }
+
+  React.useEffect(() => {
+    versions === [] && getVersionsApi(setVersions);
+  })
+
+  const handleVersionChange = (e) => {
+    setCurrentVersion(e.target.value);
+    tableRef.current !== null && tableRef.current.setData(e.target.value);
   }
 
   const handleDataImport = () => {
@@ -26,12 +47,13 @@ export const BrowseDataPage = () => {
       <PageWrapper
           toasts={toasts}
           leftMenu={[
-              <BlueButton onClick={handleDataExport} prompt={'eksportuj'}/>,
-              <BlueButton onClick={handleDataImport} prompt={'importuj'}/>,
-              <BlueNavLink path={'/dashboard'} prompt={'cofnij'} />
+            <BlueButton onClick={handleDataExport} prompt={'eksportuj'}/>,
+            <BlueButton onClick={handleDataImport} prompt={'importuj'}/>,
+            <BlueNavLink path={'/dashboard'} prompt={'cofnij'} />,
+            <VersionSelect onChange={handleVersionChange} data={versions} />
           ]}
       >
-        <StolenTable />
+        <DataTableFiltered ref={tableRef}/>
         {navToImport && <Navigate to={'/new-data'}/>}
       </PageWrapper>
   )

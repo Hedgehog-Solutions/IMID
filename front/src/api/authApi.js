@@ -7,8 +7,9 @@ export const handleLogin = (login, password) => {
 
 export const handleTrueLogin = async(login, password) => {
   axios.defaults.headers.post['Content-Type'] ='application/json';
+  axios.defaults.withCredentials = true
   try {
-    const response = await axios.post('http://localhost:5000/api/login', JSON.stringify({username: login, password}), {withCredentials: true} );
+    const response = await axios.post('http://localhost:5000/api/login', JSON.stringify({username: login, password}),  );
     console.log(response.status);
   } catch(error) {
     console.error(error);

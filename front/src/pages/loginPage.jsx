@@ -22,7 +22,7 @@ export const LoginPage = () => {
   const handleLoginAttempt = () => {
     const result = handleLogin(login, password);
 
-    handleTrueLogin(login, password).then(() => testDupa((e) => console.log(e)));
+    handleTrueLogin(login, password).then();
 
 
 
@@ -48,3 +48,4 @@ export const LoginPage = () => {
       </PageWrapper>
   )
 }
+
