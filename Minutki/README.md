@@ -2,6 +2,65 @@
 
 
 ---
+## Spotkanie 08
+### Termin
+- 09.06
+
+### Temat
+- Spotkanie zespołu przed prezentacją końcową
+
+### Obecni
+- Jakub Sarna
+- Aleksander Sabak
+- Tomasz Świderski
+- Bartłomiej Rodzik
+
+### Opis
+- Przygotowanie prezentacji końcowej
+- Przydzielenie prezentowanych kwestii do poszczególnych członków zespołu
+
+---
+## Spotkanie 07
+### Termin
+- 05.06
+
+### Temat
+- Spotkanie z mentorem i właścicielem tematu w celu pokazania końcowych efektów
+
+### Obecni
+- dr Tomasz Gambin
+- dr Marcin Szlenk
+- przedstawiciel IMID
+- Jakub Sarna
+- Aleksander Sabak
+- Tomasz Świderski
+- Bartłomiej Rodzik
+
+### Opis
+- Przedstawienie wyników pracy
+- Omówienie końcowych dopracowań
+
+---
+## Spotkanie 06
+### Termin
+- 18.05
+
+### Temat
+- Spotkanie z mentorem w celu przedstawienia postępów w pracy
+
+### Obecni
+- dr Marcin Szlenk
+- Jakub Sarna
+- Aleksander Sabak
+- Tomasz Świderski
+- Bartłomiej Rodzik
+
+### Opis
+- Przedstawienie ówczesnego etapu prac
+- Omówienie prezentacji śródsemestralnej
+- Rozważenie kolejnych działań związanych z rozbudową projektu
+
+---
 ## Spotkanie 05
 ### Termin
 - 27.04
@@ -13,6 +72,7 @@
 - Jakub Sarna
 - Aleksander Sabak
 - Tomasz Świderski
+- Bartłomiej Rodzik
 
 ### Opis
 - Stworzenie modelu C4
@@ -30,18 +90,19 @@
 - Spotkanie z przedstawicielami IMID w celu omówienia struktury bazy danych oraz zaprezentowanie makiet
 
 ### Obecni
-- dr hab. inż. Tomasz Gambin
+- dr Tomasz Gambin
+- dr Marcin Szlenk
 - Przedstawiciele IMID
-- dr inż. Marcin Szlenk
 - Batłomiej Rodzik
 - Jakub Sarna
 - Aleksander Sabak
 - Tomasz Świderski
 
 ### Opis
-- todo
-- todo
-- todo
+- Prezentacja makiet baz danych
+- Doprecyzowanie struktury baz danych
+- Doprecyzowanie wymagań dotyczących bazy danych
+- Prośba o przykładowy zestaw testowy
 
 ---
 ## Spotkanie 03
@@ -75,7 +136,7 @@
 - Pierwsze spotkanie z przedstawicielami IMID.
 
 ### Obecni
-- dr hab. inż. Tomasz Gambin
+- dr Tomasz Gambin
 - Przedstawiciele IMID
 - Batłomiej Rodzik
 - Jakub Sarna
@@ -98,8 +159,8 @@
 - Pierwsze spotkanie z właścicielem projektu oraz mentorem.
 
 ### Obecni
-- dr inż. Marcin Szlenk
-- dr hab. inż. Tomasz Gambin
+- dr Marcin Szlenk
+- dr Tomasz Gambin
 - Batłomiej Rodzik
 - Jakub Sarna
 - Aleksander Sabak
